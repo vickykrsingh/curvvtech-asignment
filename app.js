@@ -24,9 +24,15 @@ app.get('/', (req, res) => {
 const authRoutes = require('./src/routes/auth');
 app.use('/auth', authRoutes);
 
+
 // Device routes
 const deviceRoutes = require('./src/routes/devices');
 app.use('/devices', deviceRoutes);
+
+// Log & analytics routes (nested under devices)
+const logRoutes = require('./src/routes/logs');
+app.use('/devices/:id/logs', logRoutes);
+app.use('/devices/:id/usage', logRoutes); // usage endpoint is handled in logs.js
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
