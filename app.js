@@ -3,15 +3,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
+
 const morgan = require('morgan');
+const rateLimiter = require('./src/middlewares/rateLimiter');
 
 const app = express();
 
 // Middleware
+
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
+app.use(rateLimiter);
 
 
 // Health check route
@@ -44,6 +48,10 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error('MongoDB connection error:', err);
   process.exit(1);
 });
+
+
+// Start background job for auto-deactivation
+require('./src/jobs/deviceAutoDeactivate');
 
 // Start server
 const PORT = process.env.PORT || 5000;
