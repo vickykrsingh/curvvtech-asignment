@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+
+import mongoose from 'mongoose';
 
 const logSchema = new mongoose.Schema({
   device_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Device', required: true },
@@ -7,4 +8,5 @@ const logSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
 }, { timestamps: false });
 
-module.exports = mongoose.model('Log', logSchema);
+const Log = mongoose.model('Log', logSchema);
+export default Log;

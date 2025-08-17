@@ -1,8 +1,10 @@
-const express = require('express');
+
+import express from 'express';
+import Joi from 'joi';
+import Device from '../models/Device.js';
+import auth from '../middlewares/auth.js';
+
 const router = express.Router();
-const Joi = require('joi');
-const Device = require('../models/Device');
-const auth = require('../middlewares/auth');
 
 // Register new device
 router.post('/', auth, async (req, res) => {
@@ -101,4 +103,4 @@ router.post('/:id/heartbeat', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

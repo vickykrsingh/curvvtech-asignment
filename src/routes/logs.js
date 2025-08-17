@@ -1,9 +1,11 @@
-const express = require('express');
+
+import express from 'express';
+import Joi from 'joi';
+import Log from '../models/Log.js';
+import Device from '../models/Device.js';
+import auth from '../middlewares/auth.js';
+
 const router = express.Router({ mergeParams: true });
-const Joi = require('joi');
-const Log = require('../models/Log');
-const Device = require('../models/Device');
-const auth = require('../middlewares/auth');
 
 // Create log entry
 router.post('/', auth, async (req, res) => {
@@ -72,4 +74,4 @@ router.get('/usage', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+
+import mongoose from 'mongoose';
 
 const deviceSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -8,4 +9,5 @@ const deviceSchema = new mongoose.Schema({
   owner_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Device', deviceSchema);
+const Device = mongoose.model('Device', deviceSchema);
+export default Device;

@@ -1,5 +1,6 @@
-const Device = require('../models/Device');
-const cron = require('node-cron');
+
+import Device from '../models/Device.js';
+import cron from 'node-cron';
 
 // Runs every hour
 cron.schedule('0 * * * *', async () => {
@@ -10,9 +11,9 @@ cron.schedule('0 * * * *', async () => {
       { $set: { status: 'inactive' } }
     );
     if (result.modifiedCount > 0) {
-      console.log(`[AutoDeactivate] Deactivated ${result.modifiedCount} devices (inactive > 24h)`);
+      console.log(`AutoDeactivate Deactivated ${result.modifiedCount} devices (inactive > 24h)`);
     }
   } catch (err) {
-    console.error('[AutoDeactivate] Error:', err);
+    console.error('AutoDeactivate Error:', err);
   }
 });

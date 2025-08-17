@@ -1,10 +1,10 @@
-const rateLimit = require('express-rate-limit');
 
-// Custom key generator to use user id from JWT if available
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
+
+// Custom key generator: use user id if authenticated, else use safe IP key
 const getUserKey = (req) => {
   if (req.user && req.user.id) return req.user.id;
-  // fallback to IP for unauthenticated routes
-  return req.ip;
+  return ipKeyGenerator(req);
 };
 
 const limiter = rateLimit({
@@ -14,4 +14,4 @@ const limiter = rateLimit({
   message: { success: false, message: 'Too many requests, please try again later.' },
 });
 
-module.exports = limiter;
+export default limiter;

@@ -1,12 +1,15 @@
-const express = require('express');
+
+import express from 'express';
+import Joi from 'joi';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+
 const router = express.Router();
-const Joi = require('joi');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
 // Signup
 router.post('/signup', async (req, res) => {
+  console.log('SIGNUP Incoming request body:', req.body);
   const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
@@ -14,17 +17,24 @@ router.post('/signup', async (req, res) => {
     role: Joi.string().valid('user', 'admin').default('user'),
   });
   const { error } = schema.validate(req.body);
-  if (error) return res.status(400).json({ success: false, message: error.details[0].message });
+  if (error) {
+    console.log('SIGNUP Validation error:', error.details[0].message);
+    return res.status(400).json({ success: false, message: error.details[0].message });
+  }
 
   const { name, email, password, role } = req.body;
   try {
     let user = await User.findOne({ email });
-    if (user) return res.status(409).json({ success: false, message: 'Email already registered' });
+    if (user) {
+      console.log('SIGNUP Email already registered:', email);
+      return res.status(409).json({ success: false, message: 'Email already registered' });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new User({ name, email, password: hashedPassword, role });
     await user.save();
     res.status(201).json({ success: true, message: 'User registered successfully' });
   } catch (err) {
+    console.log('SIGNUP Server error:', err.message);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
@@ -64,4 +74,4 @@ router.post('/login', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
