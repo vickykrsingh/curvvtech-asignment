@@ -19,9 +19,14 @@ app.get('/', (req, res) => {
   res.json({ success: true, message: 'API is running' });
 });
 
+
 // Auth routes
 const authRoutes = require('./src/routes/auth');
 app.use('/auth', authRoutes);
+
+// Device routes
+const deviceRoutes = require('./src/routes/devices');
+app.use('/devices', deviceRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
